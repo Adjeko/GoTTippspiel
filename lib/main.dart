@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(MyApp());
 
@@ -27,14 +28,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,10 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: _buildBody(context),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () {
-          Dialog nameDialog = _buildDialog();
-          showDialog(context: context, builder: (BuildContext context) => nameDialog);
-        },
+        onPressed: () {_openNameDialog(context);},
       ),
     );
   }
@@ -90,7 +81,21 @@ class _MyHomePageState extends State<MyHomePage> {
    );
   }
 
-  Widget _buildDialog () {
+  Future _openNameDialog(BuildContext context) async{
+    Dialog nameDialog = await _buildDialog();
+    showDialog(context: context, builder: (BuildContext context) => nameDialog);
+  }
+
+  Future<Widget> _buildDialog() async {
+    final sp = await SharedPreferences.getInstance();
+    String name = sp.getString("name") ?? "";   
+    
+    String hintText = name.isNotEmpty ? "Dein Name ist " + name : "Bitte trage deinen Namen ein";
+
+    bool buttonEnabled = name.isNotEmpty ? false : true;
+    String buttonText = name.isNotEmpty ? "Bereits gespeichert" : "Speichern";
+
+    TextEditingController nameController = new TextEditingController();
     return Dialog(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
             child: Container (
@@ -100,20 +105,27 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   TextField(
+                    controller: nameController,
+                    textAlign: TextAlign.center,
                     decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "Bitte trage deinen Namen ein",
-                      contentPadding: EdgeInsets.all(30.0)
+                      hintText: hintText,
                     ),
                   ),
                   RaisedButton(
-                    child: Text("Speichern"),
-                    onPressed: () {},
+                    child: Text(buttonText),
+                    onPressed: () => buttonEnabled ? _nameSaving(nameController, sp) : null,
                   ),
                 ],
               ),
             ),
           );
+  }
+
+  void _nameSaving(TextEditingController tc, SharedPreferences sp) {
+    if (tc.text.isNotEmpty) {
+      sp.setString("name", tc.text);
+      Navigator.pop(context);
+    }
   }
 
 }
