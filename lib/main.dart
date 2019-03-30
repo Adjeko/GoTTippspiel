@@ -31,19 +31,35 @@ class _MyHomePageState extends State<MyHomePage> {
   
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: _buildBody(context),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {_openNameDialog(context);},
-      ),
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title),
+          bottom:TabBar(
+            tabs: [
+              Tab(icon: Icon(Icons.beach_access)),
+              Tab(icon: Icon(Icons.bluetooth_connected)),
+              Tab(icon: Icon(Icons.landscape)),
+            ],
+          ),
+        ),
+        body: TabBarView(
+          children: [
+            _buildDashboard(context),
+            Text("Tab2"),
+            Text("Tab3"),
+          ]
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {_openNameDialog(context);},
+        ),
+      )
     );
   }
 
-  Widget _buildBody(BuildContext context) {
+  Widget _buildDashboard(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream: Firestore.instance.collection('predictions').snapshots(),
       builder: (context, snapshot) {
