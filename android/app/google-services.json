@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "823325824324",
+    "firebase_url": "https://gottippspiel.firebaseio.com",
+    "project_id": "gottippspiel",
+    "storage_bucket": "gottippspiel.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:823325824324:android:f19bdaf1ca9b76ae",
+        "android_client_info": {
+          "package_name": "com.adjeko.got_tippspiel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "823325824324-ocdvfvq0c8v4271u8tqou8carrdtsd07.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBu9yIgBlB7T5j8ivgueGxoCn5t-fdnFwo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
