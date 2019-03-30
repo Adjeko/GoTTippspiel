@@ -41,7 +41,17 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: _buildBody(context), // This trailing comma makes auto-formatting nicer for build methods.
+      body: _buildBody(context),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          Dialog nameDialog = Dialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+            child: Text("test Dialog")
+          );
+          showDialog(context: context, builder: (BuildContext context) => nameDialog);
+        },
+      ),
     );
   }
 
