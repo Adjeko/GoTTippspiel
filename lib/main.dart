@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Game of Thrones Tippspiel'),
+      home: MyHomePage(title: 'Game of Thrones Season 8 Tippspiel'),
     );
   }
 }
@@ -38,25 +38,74 @@ class _MyHomePageState extends State<MyHomePage> {
           title: Text(widget.title),
           bottom:TabBar(
             tabs: [
-              Tab(icon: Icon(Icons.beach_access)),
-              Tab(icon: Icon(Icons.bluetooth_connected)),
-              Tab(icon: Icon(Icons.landscape)),
+              Tab(icon: Icon(Icons.dashboard)),
+              Tab(icon: Icon(Icons.person)),
+              Tab(icon: Icon(Icons.tv)),
             ],
           ),
         ),
         body: TabBarView(
           children: [
             _buildDashboard(context),
-            Text("Tab2"),
-            Text("Tab3"),
+            FutureBuilder(
+              future: _buildPersonalPredictions(context),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return snapshot.data;
+                }
+                else {
+                  return CircularProgressIndicator();
+                }
+                
+              },
+            ),
+            FutureBuilder(
+              future: _buildReferencePredictions(context),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return snapshot.data;
+                }
+                else {
+                  return CircularProgressIndicator();
+                }
+              },
+            ),
           ]
         ),
         floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
+          child: Icon(Icons.person_add),
           onPressed: () {_openNameDialog(context);},
         ),
       )
     );
+  }
+
+  Future<Widget> _buildPersonalPredictions(BuildContext context) async{
+    final sp = await SharedPreferences.getInstance();
+    return StreamBuilder<DocumentSnapshot>(
+      stream: Firestore.instance.collection('predictions').document("Herbert").snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return LinearProgressIndicator();
+
+        return _buildDocument(context, snapshot.data);
+      },
+    );
+  }
+
+  Future<Widget> _buildReferencePredictions(BuildContext context) async{
+    final sp = await SharedPreferences.getInstance();
+    return StreamBuilder<DocumentSnapshot>(
+      stream: Firestore.instance.collection('reference').document("reference").snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return LinearProgressIndicator();
+
+        return _buildDocument(context, snapshot.data);
+      },
+    );
+  }
+
+  Widget _buildDocument(BuildContext context, DocumentSnapshot snapshot) {
+    return Text("Name: " + snapshot.data["name"] + " Value: " + snapshot.data["points"].toString());
   }
 
   Widget _buildDashboard(BuildContext context) {
@@ -90,8 +139,8 @@ class _MyHomePageState extends State<MyHomePage> {
        ),
        child: ListTile(
          title: Text(record.name),
-         trailing: Text(record.votes.toString()),
-         onTap: () => record.reference.updateData({'votes': record.votes + 1}),
+         trailing: Text(record.points.toString()),
+         onTap: () => record.reference.updateData({'points': record.points + 1}),
        ),
      ),
    );
@@ -148,18 +197,18 @@ class _MyHomePageState extends State<MyHomePage> {
 
 class Record {
  final String name;
- final int votes;
+ final int points;
  final DocumentReference reference;
 
  Record.fromMap(Map<String, dynamic> map, {this.reference})
      : assert(map['name'] != null),
-       assert(map['votes'] != null),
+       assert(map['points'] != null),
        name = map['name'],
-       votes = map['votes'];
+       points = map['points'];
 
  Record.fromSnapshot(DocumentSnapshot snapshot)
      : this.fromMap(snapshot.data, reference: snapshot.reference);
 
  @override
- String toString() => "Record<$name:$votes>";
+ String toString() => "Record<$name:$points>";
 }
