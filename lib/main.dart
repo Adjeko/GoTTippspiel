@@ -45,10 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          Dialog nameDialog = Dialog(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
-            child: Text("test Dialog")
-          );
+          Dialog nameDialog = _buildDialog();
           showDialog(context: context, builder: (BuildContext context) => nameDialog);
         },
       ),
@@ -91,6 +88,32 @@ class _MyHomePageState extends State<MyHomePage> {
        ),
      ),
    );
+  }
+
+  Widget _buildDialog () {
+    return Dialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+            child: Container (
+              height: 150.0,
+              width: 300.0,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  TextField(
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: "Bitte trage deinen Namen ein",
+                      contentPadding: EdgeInsets.all(30.0)
+                    ),
+                  ),
+                  RaisedButton(
+                    child: Text("Speichern"),
+                    onPressed: () {},
+                  ),
+                ],
+              ),
+            ),
+          );
   }
 
 }
