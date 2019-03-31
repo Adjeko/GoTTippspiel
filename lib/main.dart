@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.amber,
       ),
       home: MyHomePage(title: 'Game of Thrones Season 8 Tippspiel'),
     );
@@ -83,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<Widget> _buildPersonalPredictions(BuildContext context) async{
     final sp = await SharedPreferences.getInstance();
     return StreamBuilder<DocumentSnapshot>(
-      stream: Firestore.instance.collection('predictions').document("Herbert").snapshots(),
+      stream: Firestore.instance.collection('predictions').document(sp.getString("name")).snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return LinearProgressIndicator();
 
@@ -121,61 +121,65 @@ class _MyHomePageState extends State<MyHomePage> {
                     Text("Weißer Wanderer", textAlign: TextAlign.center),
                   ]
                 ),
-                _characterLine("Jon Snow", "JonSnow", snapshot),
-                _characterLine("Arya Stark", "AryaStark", snapshot),
-                _characterLine("Bran Stark", "BranStark", snapshot),
-                _characterLine("Sansa Stark", "SansaStark", snapshot),
-                _characterLine("Cersei Lennister", "Cersei", snapshot),
-                _characterLine("Jaime Lennister", "Jaime", snapshot),
-                _characterLine("Tyrion Lennister", "Tyrion", snapshot),
-                _characterLine("Deanerys Targaryen", "Daenerys", snapshot),
-                _characterLine("Asha Graufreud", "Asha", snapshot),
-                _characterLine("Euron Graufreud", "Euron", snapshot),
-                _characterLine("Theon Graufreud", "Theon", snapshot),
-                _characterLine("Melisandre", "Melisandre", snapshot),
-                _characterLine("Jorah Mormont", "Jorah", snapshot),
-                _characterLine("Der Bluthund", "Bluthund", snapshot),
-                _characterLine("Der Berg", "Berg", snapshot),
-                _characterLine("Samwell Tarley", "Samwell", snapshot),
-                _characterLine("Gilly", "Gilly", snapshot),
-                _characterLine("Lord Varys", "LordVarys", snapshot),
-                _characterLine("Brienne von Tarth", "Brienne", snapshot),
-                _characterLine("Davos Seewert", "Davos", snapshot),
-                _characterLine("Bronn", "Bronn", snapshot),
-                _characterLine("Podrick Payne", "Podrick", snapshot),
-                _characterLine("Tormund Riesentod", "Tormund", snapshot),
-                _characterLine("Grauer Wurm", "GrauerWurm", snapshot),
-                _characterLine("Gendry", "Gendry", snapshot),
-                _characterLine("Beric Dondarrion", "Beric", snapshot),
+                _characterLine("Jon Snow", "JonSnow", snapshot, isReference),
+                _characterLine("Arya Stark", "AryaStark", snapshot, isReference),
+                _characterLine("Bran Stark", "BranStark", snapshot, isReference),
+                _characterLine("Sansa Stark", "SansaStark", snapshot, isReference),
+                _characterLine("Cersei Lennister", "Cersei", snapshot, isReference),
+                _characterLine("Jaime Lennister", "Jaime", snapshot, isReference),
+                _characterLine("Tyrion Lennister", "Tyrion", snapshot, isReference),
+                _characterLine("Deanerys Targaryen", "Daenerys", snapshot, isReference),
+                _characterLine("Asha Graufreud", "Asha", snapshot, isReference),
+                _characterLine("Euron Graufreud", "Euron", snapshot, isReference),
+                _characterLine("Theon Graufreud", "Theon", snapshot, isReference),
+                _characterLine("Melisandre", "Melisandre", snapshot, isReference),
+                _characterLine("Jorah Mormont", "Jorah", snapshot, isReference),
+                _characterLine("Der Bluthund", "Bluthund", snapshot, isReference),
+                _characterLine("Der Berg", "Berg", snapshot, isReference),
+                _characterLine("Samwell Tarley", "Samwell", snapshot, isReference),
+                _characterLine("Gilly", "Gilly", snapshot, isReference),
+                _characterLine("Lord Varys", "LordVarys", snapshot, isReference),
+                _characterLine("Brienne von Tarth", "Brienne", snapshot, isReference),
+                _characterLine("Davos Seewert", "Davos", snapshot, isReference),
+                _characterLine("Bronn", "Bronn", snapshot, isReference),
+                _characterLine("Podrick Payne", "Podrick", snapshot, isReference),
+                _characterLine("Tormund Riesentod", "Tormund", snapshot, isReference),
+                _characterLine("Grauer Wurm", "GrauerWurm", snapshot, isReference),
+                _characterLine("Gendry", "Gendry", snapshot, isReference),
+                _characterLine("Beric Dondarrion", "Beric", snapshot, isReference),
               ],
             ),
             TextField(
               decoration:InputDecoration(
-                hintText: snapshot.data["PayensGeheimnis"],
+                helperText: snapshot.data["PayensGeheimnis"],
                 labelText: "Wird Podrick Paynes Geheimnis aufgeklärt?",
                 suffixText: "1 Punkt"
               ),
+              onChanged: (value) => !isReference ? {snapshot.reference.updateData({"PayensGeheimnis":value})} : null,
             ),
             TextField(
               decoration:InputDecoration(
-                hintText: snapshot.data["BranNachtkoenig"],
+                helperText: snapshot.data["BranNachtkoenig"],
                 labelText: "Ist Bran der Nachtkönig?",
                 suffixText: "2 Punkte"
               ),
+              onChanged: (value) => !isReference ? {snapshot.reference.updateData({"BranNachtkoenig":value})} : null,
             ),
             TextField(
               decoration:InputDecoration(
-                hintText: snapshot.data["KillNachtkoenig"],
+                helperText: snapshot.data["KillNachtkoenig"],
                 labelText: "Wer tötet den Nachtkönig?",
                 suffixText: "3 Punkte"
               ),
+              onChanged: (value) => !isReference ? {snapshot.reference.updateData({"KillNachtkoenig":value})} : null,
             ),
             TextField(
               decoration:InputDecoration(
-                hintText: snapshot.data["EisernerThron"],
+                helperText: snapshot.data["EisernerThron"],
                 labelText: "Wer sitzt am Ende auf dem Eisernen Thron?",
                 suffixText: "4 Punkte"
               ),
+              onChanged: (value) => !isReference ? {snapshot.reference.updateData({"EisernerThron":value})} : null,
             ),
           ],
         ),
@@ -183,15 +187,19 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  TableRow _characterLine(String name, String code, DocumentSnapshot snap) {
+  TableRow _characterLine(String name, String code, DocumentSnapshot snap, bool isReference) {
     return TableRow(
       children: [
         Text(name, textAlign: TextAlign.center),
-        Checkbox(value: snap.data[code + "Lives"], onChanged: (value) {snap.reference.updateData({code + "Lives":value});}),
-        Checkbox(value: snap.data[code + "Dies"], onChanged: (value) {snap.reference.updateData({code + "Dies":value});}),
-        Checkbox(value: snap.data[code + "Walker"], onChanged: (value) {snap.reference.updateData({code + "Walker":value});}),
+        Checkbox(value: snap.data[code + "Lives"], onChanged: (value) => !isReference ? _checkboxUpdate(value, code, "Lives", snap) : null), 
+        Checkbox(value: snap.data[code + "Dies"], onChanged: (value) => !isReference ? _checkboxUpdate(value, code, "Dies", snap) : null),
+        Checkbox(value: snap.data[code + "Walker"], onChanged: (value) => !isReference ? _checkboxUpdate(value, code, "Walker", snap) : null),
       ]
     );
+  }
+
+  void _checkboxUpdate(bool value,String code, String action, DocumentSnapshot snap) {
+    snap.reference.updateData({code + action:value});
   }
 
   Widget _buildDashboard(BuildContext context) {
@@ -212,11 +220,28 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
-    final record = Record.fromSnapshot(data);
+  Widget _buildListItem(BuildContext context, DocumentSnapshot snap) {
+    return FutureBuilder(
+      future: _buildFutureListItem(context, snap),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return snapshot.data;
+        }
+        else {
+          return CircularProgressIndicator();
+        }
+      },
+    );
+  }
+
+  Future<Widget> _buildFutureListItem(BuildContext context, DocumentSnapshot snap) async {
+
+    DocumentSnapshot reference = await Firestore.instance.collection('reference').document('reference').get();  
+    
+    snap.reference.updateData({"points":_calcPoints(reference, snap)});
 
     return Padding(
-     key: ValueKey(record.name),
+     key: ValueKey(snap.data["name"]),
      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
      child: Container(
        decoration: BoxDecoration(
@@ -224,12 +249,42 @@ class _MyHomePageState extends State<MyHomePage> {
          borderRadius: BorderRadius.circular(5.0),
        ),
        child: ListTile(
-         title: Text(record.name),
-         trailing: Text(record.points.toString()),
-         onTap: () => record.reference.updateData({'points': record.points + 1}),
+         title: Text(snap.data["name"]),
+         trailing: Text(snap.data["points"].toString()),
        ),
      ),
    );
+  }
+
+  int _calcPoints (DocumentSnapshot reference, DocumentSnapshot user) {
+    int points = 0;
+    List<String> names = ["JonSnow", "AryaStark", "BranStark", "SansaStark", "Cersei", "Jaime", "Tyrion",
+        "Daenerys", "Asha", "Euron", "Theon", "Melisandre", "Jorah", "Bluthund", "Berg", "Samwell", "Gilly",
+        "LordVarys", "Brienne", "Davos", "Bronn", "Podrick", "Tormund", "GrauerWurm", "Gendry", "Beric"];
+
+    for (var name in names) {
+      if(reference.data[name + "Lives"] == true && user.data[name + "Lives"] == true) {
+        points++;
+        continue;
+      }
+      if(reference.data[name + "Dies"] == true && user.data[name + "Dies"] == true) {
+        points++;
+        if(reference.data[name + "Walker"] == true && user.data[name + "Walker"] == true) {
+          points++;
+        }
+        if(reference.data[name + "Walker"] != user.data[name + "Walker"]) {
+          points--;
+        }
+        continue;
+      }
+    }
+
+    points += reference.data["PayensGeheimnis"] == user.data["PayensGeheimnis"] ? 1 : 0;
+    points += reference.data["BranNachtkoenig"] == user.data["BranNachtkoenig"] ? 2 : 0;
+    points += reference.data["KillNachtkoenig"] == user.data["KillNachtkoenig"] ? 3 : 0;
+    points += reference.data["EisernerThron"] == user.data["EisernerThron"] ? 4 : 0;
+
+    return points;
   }
 
   Future _openNameDialog(BuildContext context) async{
@@ -300,22 +355,4 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-}
-
-class Record {
- final String name;
- final int points;
- final DocumentReference reference;
-
- Record.fromMap(Map<String, dynamic> map, {this.reference})
-     : assert(map['name'] != null),
-       assert(map['points'] != null),
-       name = map['name'],
-       points = map['points'];
-
- Record.fromSnapshot(DocumentSnapshot snapshot)
-     : this.fromMap(snapshot.data, reference: snapshot.reference);
-
- @override
- String toString() => "Record<$name:$points>";
 }
