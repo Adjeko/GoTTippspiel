@@ -18,6 +18,34 @@ class MyApp extends StatelessWidget {
   }
 }
 
+class PersonalPage extends StatelessWidget {
+  String name;
+  Widget page;
+  PersonalPage(String name, Widget page) {
+    this.name = name;
+    this.page = page;
+  }
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: name,
+      theme: ThemeData(
+        primarySwatch: Colors.amber,
+      ),
+      home: Scaffold(
+        appBar:AppBar(
+          title: Text(name),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () => Navigator.pop(context)),
+        ),
+        body: page,
+      ),
+    );
+  }
+}
+
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
 
@@ -77,6 +105,17 @@ class _MyHomePageState extends State<MyHomePage> {
           onPressed: () {_openNameDialog(context);},
         ),
       )
+    );
+  }
+
+  Widget _buildOtherPersonalPredictions(BuildContext context, String name) {
+    return StreamBuilder<DocumentSnapshot>(
+      stream: Firestore.instance.collection('predictions').document(name).snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return LinearProgressIndicator();
+
+        return _buildDocument(context, snapshot.data, true);
+      },
     );
   }
 
@@ -254,6 +293,9 @@ class _MyHomePageState extends State<MyHomePage> {
        child: ListTile(
          title: Text(snap.data["name"]),
          trailing: Text(snap.data["points"].toString()),
+         onTap: () {
+           Navigator.push(context, MaterialPageRoute(builder: (context) => PersonalPage(snap.data["name"], _buildOtherPersonalPredictions(context, snap.data["name"]))));
+         },
        ),
      ),
    );
