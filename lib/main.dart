@@ -56,6 +56,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  bool _redraw = false;
+
+  void _redrawWidget() {
+    setState(() {
+      _redraw = !_redraw;
+    });
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -123,6 +130,10 @@ class _MyHomePageState extends State<MyHomePage> {
     final sp = await SharedPreferences.getInstance();
     DocumentSnapshot canChangeDoc = await Firestore.instance.collection("reference").document("settings").get();
     bool canChange = canChangeDoc.data["canChange"];
+
+    if(!sp.getKeys().contains("name")){
+      return Text("Bitte melde dich zuerst mit einem Namen an");
+    }
 
     return StreamBuilder<DocumentSnapshot>(
       stream: Firestore.instance.collection('predictions').document(sp.getString("name")).snapshots(),
@@ -402,7 +413,7 @@ class _MyHomePageState extends State<MyHomePage> {
       data["KillNachtkoenig"] = "Bitte eintragen";
       data["EisernerThron"] = "Bitte eintragen";
       col.document(tc.text).setData(data);
-
+      _redrawWidget();
       Navigator.pop(context);
     }
   }
