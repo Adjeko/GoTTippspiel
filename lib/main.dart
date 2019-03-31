@@ -87,7 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
       builder: (context, snapshot) {
         if (!snapshot.hasData) return LinearProgressIndicator();
 
-        return _buildDocument(context, snapshot.data);
+        return _buildDocument(context, snapshot.data, false);
       },
     );
   }
@@ -99,20 +99,105 @@ class _MyHomePageState extends State<MyHomePage> {
       builder: (context, snapshot) {
         if (!snapshot.hasData) return LinearProgressIndicator();
 
-        return _buildDocument(context, snapshot.data);
+        return _buildDocument(context, snapshot.data, true);
       },
     );
   }
 
-  Widget _buildDocument(BuildContext context, DocumentSnapshot snapshot) {
-    return Text("Name: " + snapshot.data["name"] + " Value: " + snapshot.data["points"].toString());
+  Widget _buildDocument(BuildContext context, DocumentSnapshot snapshot, bool isReference) {
+    return SingleChildScrollView(
+      child:Padding(
+        padding:EdgeInsets.all(10.0),
+        child: Column(
+          children: [
+            Table(
+              border: TableBorder.all(),
+              children: [
+                TableRow(
+                  children: [
+                    Text("Charakter", textAlign: TextAlign.center),
+                    Text("Überlebt", textAlign: TextAlign.center),
+                    Text("Stirbt", textAlign: TextAlign.center),
+                    Text("Weißer Wanderer", textAlign: TextAlign.center),
+                  ]
+                ),
+                _characterLine("Jon Snow"),
+                _characterLine("Arya Stark"),
+                _characterLine("Bran Stark"),
+                _characterLine("Sansa Stark"),
+                _characterLine("Cersei Lennister"),
+                _characterLine("Jaime Lennister"),
+                _characterLine("Tyrion Lennister"),
+                _characterLine("Deanerys Targaryen"),
+                _characterLine("Asha Graufreud"),
+                _characterLine("Euron Graufreud"),
+                _characterLine("Melisandre"),
+                _characterLine("Jorah Mormont"),
+                _characterLine("Der Bluthund"),
+                _characterLine("Der Berg"),
+                _characterLine("Samwell Tarley"),
+                _characterLine("Gilly"),
+                _characterLine("Lord Varys"),
+                _characterLine("Brienne von Tarth"),
+                _characterLine("Davos Seewert"),
+                _characterLine("Bronn"),
+                _characterLine("Podrick Payne"),
+                _characterLine("Tormund Riesentod"),
+                _characterLine("Grauer Wurm"),
+                _characterLine("Gendry"),
+                _characterLine("Beric Dondarrion"),
+              ],
+            ),
+            TextField(
+              decoration:InputDecoration(
+                hintText: "Hint",
+                labelText: "Podrick Paynes Geheimnis",
+                suffixText: "1 Punkt"
+              ),
+            ),
+            TextField(
+              decoration:InputDecoration(
+                hintText: "Hint",
+                labelText: "Bran Nachtkönig",
+                suffixText: "2 Punkte"
+              ),
+            ),
+            TextField(
+              decoration:InputDecoration(
+                hintText: "Hint",
+                labelText: "Bran Nachtkönig",
+                suffixText: "3 Punkte"
+              ),
+            ),
+            TextField(
+              decoration:InputDecoration(
+                hintText: "Hint",
+                labelText: "Eiserner Thron",
+                suffixText: "4 Punkte"
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  TableRow _characterLine(String name) {
+    return TableRow(
+      children: [
+        Text(name, textAlign: TextAlign.center),
+        Checkbox(value: false, onChanged: (value) {}),
+        Checkbox(value: true, onChanged: (value) {}),
+        Checkbox(value: false, onChanged: (value) {}),
+      ]
+    );
   }
 
   Widget _buildDashboard(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream: Firestore.instance.collection('predictions').snapshots(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) return LinearProgressIndicator();
+        if (!snapshot.hasData) return CircularProgressIndicator();
 
         return _buildList(context, snapshot.data.documents);
       },
