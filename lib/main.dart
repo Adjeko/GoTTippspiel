@@ -131,6 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 _characterLine("Deanerys Targaryen", "JonSnow", snapshot),
                 _characterLine("Asha Graufreud", "JonSnow", snapshot),
                 _characterLine("Euron Graufreud", "JonSnow", snapshot),
+                _characterLine("Theon Graufreud", "JonSnow", snapshot),
                 _characterLine("Melisandre", "JonSnow", snapshot),
                 _characterLine("Jorah Mormont", "JonSnow", snapshot),
                 _characterLine("Der Bluthund", "JonSnow", snapshot),
@@ -150,28 +151,28 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             TextField(
               decoration:InputDecoration(
-                hintText: "Hint",
+                hintText: snapshot.data["PayensGeheimnis"],
                 labelText: "Podrick Paynes Geheimnis",
                 suffixText: "1 Punkt"
               ),
             ),
             TextField(
               decoration:InputDecoration(
-                hintText: "Hint",
+                hintText: snapshot.data["BranNachtkoenig"],
                 labelText: "Bran Nachtkönig",
                 suffixText: "2 Punkte"
               ),
             ),
             TextField(
               decoration:InputDecoration(
-                hintText: "Hint",
+                hintText: snapshot.data["KillNachtkoenig"],
                 labelText: "Bran Nachtkönig",
                 suffixText: "3 Punkte"
               ),
             ),
             TextField(
               decoration:InputDecoration(
-                hintText: "Hint",
+                hintText: snapshot.data["EisernerThron"],
                 labelText: "Eiserner Thron",
                 suffixText: "4 Punkte"
               ),
@@ -274,6 +275,27 @@ class _MyHomePageState extends State<MyHomePage> {
   void _nameSaving(TextEditingController tc, SharedPreferences sp) {
     if (tc.text.isNotEmpty) {
       sp.setString("name", tc.text);
+
+      CollectionReference col = Firestore.instance.collection("predictions");
+
+      Map<String, dynamic> data = Map<String, dynamic>();
+      data["name"] = tc.text;
+      data["points"] = 4242;
+      List<String> names = ["JonSnow", "AryaStark", "BranStark", "SansaStark", "Cersei", "Jaime", "Tyrion",
+        "Daenerys", "Asha", "Euron", "Theon", "Melisandre", "Jorah", "Bluthund", "Berg", "Samwell", "Gilly",
+        "LordVarys", "Brienne", "Davos", "Bronn", "Podrick", "Tormund", "GrauerWurm", "Gendry", "Beric"];
+      for (var n in names) {
+        data[n + "Lives"] = false;
+        data[n + "Dies"] = false;
+        data[n + "Walker"] = false;
+      }
+
+      data["PayensGeheimnis"] = "Bitte eintragen";
+      data["BranNachtkoenig"] = "Bitte eintragen";
+      data["KillNachtkoenig"] = "Bitte eintragen";
+      data["EisernerThron"] = "Bitte eintragen";
+      col.document(tc.text).setData(data);
+
       Navigator.pop(context);
     }
   }
