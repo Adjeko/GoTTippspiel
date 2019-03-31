@@ -152,6 +152,9 @@ class _MyHomePageState extends State<MyHomePage> {
         padding:EdgeInsets.all(10.0),
         child: Column(
           children: [
+            Text("Regeln", style: TextStyle(fontWeight: FontWeight.bold),),
+            Text("1) Wähle, ob ein Charakter stirbt oder überlebt. Jede richtige Antwort bringt einen Punkt."),
+            Text("2) Wenn du dich für den Tod entschieden hast, wähle, ob er als Weißer Wanderer wieder aufersteht. WEnn du richtig liegst, erhälst du einen Extrapunkt - liegst du falsch, gibt es einen Minuspunkt."),
             Table(
               border: TableBorder.all(),
               children: [
@@ -241,6 +244,10 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _checkboxUpdate(bool value,String code, String action, DocumentSnapshot snap) {
+    if(action == "Walker" && snap.data[code + "Dies"] == false){
+      snap.reference.updateData({code + "Dies":true});
+    }
+
     snap.reference.updateData({code + action:value});
   }
 
