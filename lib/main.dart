@@ -122,58 +122,58 @@ class _MyHomePageState extends State<MyHomePage> {
                   ]
                 ),
                 _characterLine("Jon Snow", "JonSnow", snapshot),
-                _characterLine("Arya Stark", "JonSnow", snapshot),
-                _characterLine("Bran Stark", "JonSnow", snapshot),
-                _characterLine("Sansa Stark", "JonSnow", snapshot),
-                _characterLine("Cersei Lennister", "JonSnow", snapshot),
-                _characterLine("Jaime Lennister", "JonSnow", snapshot),
-                _characterLine("Tyrion Lennister", "JonSnow", snapshot),
-                _characterLine("Deanerys Targaryen", "JonSnow", snapshot),
-                _characterLine("Asha Graufreud", "JonSnow", snapshot),
-                _characterLine("Euron Graufreud", "JonSnow", snapshot),
-                _characterLine("Theon Graufreud", "JonSnow", snapshot),
-                _characterLine("Melisandre", "JonSnow", snapshot),
-                _characterLine("Jorah Mormont", "JonSnow", snapshot),
-                _characterLine("Der Bluthund", "JonSnow", snapshot),
-                _characterLine("Der Berg", "JonSnow", snapshot),
-                _characterLine("Samwell Tarley", "JonSnow", snapshot),
-                _characterLine("Gilly", "JonSnow", snapshot),
-                _characterLine("Lord Varys", "JonSnow", snapshot),
-                _characterLine("Brienne von Tarth", "JonSnow", snapshot),
-                _characterLine("Davos Seewert", "JonSnow", snapshot),
-                _characterLine("Bronn", "JonSnow", snapshot),
-                _characterLine("Podrick Payne", "JonSnow", snapshot),
-                _characterLine("Tormund Riesentod", "JonSnow", snapshot),
-                _characterLine("Grauer Wurm", "JonSnow", snapshot),
-                _characterLine("Gendry", "JonSnow", snapshot),
-                _characterLine("Beric Dondarrion", "JonSnow", snapshot),
+                _characterLine("Arya Stark", "AryaStark", snapshot),
+                _characterLine("Bran Stark", "BranStark", snapshot),
+                _characterLine("Sansa Stark", "SansaStark", snapshot),
+                _characterLine("Cersei Lennister", "Cersei", snapshot),
+                _characterLine("Jaime Lennister", "Jaime", snapshot),
+                _characterLine("Tyrion Lennister", "Tyrion", snapshot),
+                _characterLine("Deanerys Targaryen", "Daenerys", snapshot),
+                _characterLine("Asha Graufreud", "Asha", snapshot),
+                _characterLine("Euron Graufreud", "Euron", snapshot),
+                _characterLine("Theon Graufreud", "Theon", snapshot),
+                _characterLine("Melisandre", "Melisandre", snapshot),
+                _characterLine("Jorah Mormont", "Jorah", snapshot),
+                _characterLine("Der Bluthund", "Bluthund", snapshot),
+                _characterLine("Der Berg", "Berg", snapshot),
+                _characterLine("Samwell Tarley", "Samwell", snapshot),
+                _characterLine("Gilly", "Gilly", snapshot),
+                _characterLine("Lord Varys", "LordVarys", snapshot),
+                _characterLine("Brienne von Tarth", "Brienne", snapshot),
+                _characterLine("Davos Seewert", "Davos", snapshot),
+                _characterLine("Bronn", "Bronn", snapshot),
+                _characterLine("Podrick Payne", "Podrick", snapshot),
+                _characterLine("Tormund Riesentod", "Tormund", snapshot),
+                _characterLine("Grauer Wurm", "GrauerWurm", snapshot),
+                _characterLine("Gendry", "Gendry", snapshot),
+                _characterLine("Beric Dondarrion", "Beric", snapshot),
               ],
             ),
             TextField(
               decoration:InputDecoration(
                 hintText: snapshot.data["PayensGeheimnis"],
-                labelText: "Podrick Paynes Geheimnis",
+                labelText: "Wird Podrick Paynes Geheimnis aufgeklärt?",
                 suffixText: "1 Punkt"
               ),
             ),
             TextField(
               decoration:InputDecoration(
                 hintText: snapshot.data["BranNachtkoenig"],
-                labelText: "Bran Nachtkönig",
+                labelText: "Ist Bran der Nachtkönig?",
                 suffixText: "2 Punkte"
               ),
             ),
             TextField(
               decoration:InputDecoration(
                 hintText: snapshot.data["KillNachtkoenig"],
-                labelText: "Bran Nachtkönig",
+                labelText: "Wer tötet den Nachtkönig?",
                 suffixText: "3 Punkte"
               ),
             ),
             TextField(
               decoration:InputDecoration(
                 hintText: snapshot.data["EisernerThron"],
-                labelText: "Eiserner Thron",
+                labelText: "Wer sitzt am Ende auf dem Eisernen Thron?",
                 suffixText: "4 Punkte"
               ),
             ),
@@ -280,7 +280,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
       Map<String, dynamic> data = Map<String, dynamic>();
       data["name"] = tc.text;
-      data["points"] = 4242;
+      data["points"] = 0;
       List<String> names = ["JonSnow", "AryaStark", "BranStark", "SansaStark", "Cersei", "Jaime", "Tyrion",
         "Daenerys", "Asha", "Euron", "Theon", "Melisandre", "Jorah", "Bluthund", "Berg", "Samwell", "Gilly",
         "LordVarys", "Brienne", "Davos", "Bronn", "Podrick", "Tormund", "GrauerWurm", "Gendry", "Beric"];
