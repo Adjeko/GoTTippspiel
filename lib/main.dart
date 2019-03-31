@@ -82,12 +82,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<Widget> _buildPersonalPredictions(BuildContext context) async{
     final sp = await SharedPreferences.getInstance();
+    DocumentSnapshot canChangeDoc = await Firestore.instance.collection("reference").document("settings").get();
+    bool canChange = canChangeDoc.data["canChange"];
+
     return StreamBuilder<DocumentSnapshot>(
       stream: Firestore.instance.collection('predictions').document(sp.getString("name")).snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return LinearProgressIndicator();
 
-        return _buildDocument(context, snapshot.data, false);
+        return _buildDocument(context, snapshot.data, !canChange);
       },
     );
   }
