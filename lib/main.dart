@@ -81,7 +81,26 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         body: TabBarView(
           children: [
-            _buildDashboard(context),
+            Container(
+              child: Column(
+                children: [
+                  FutureBuilder(
+                    future: _dashboardText(context),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        return snapshot.data;
+                      }
+                      else {
+                        return AspectRatio(aspectRatio: 1, child: CircularProgressIndicator());
+                      }
+                    },
+                  ),
+                  Expanded(
+                    child: _buildDashboard(context),
+                  ),
+                ],
+              ),
+            ),
             FutureBuilder(
               future: _buildPersonalPredictions(context),
               builder: (context, snapshot) {
@@ -89,9 +108,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   return snapshot.data;
                 }
                 else {
-                  return CircularProgressIndicator();
+                  return AspectRatio(aspectRatio: 1, child: CircularProgressIndicator());
                 }
-                
               },
             ),
             FutureBuilder(
@@ -101,7 +119,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   return snapshot.data;
                 }
                 else {
-                  return CircularProgressIndicator();
+                  return AspectRatio(aspectRatio: 1, child: CircularProgressIndicator());
                 }
               },
             ),
@@ -124,6 +142,12 @@ class _MyHomePageState extends State<MyHomePage> {
         return _buildDocument(context, snapshot.data, true);
       },
     );
+  }
+
+  Future<Widget> _dashboardText(BuildContext context) async{
+    DocumentSnapshot dashboardTextDoc = await Firestore.instance.collection("reference").document("settings").get();
+    String dashboardText = dashboardTextDoc.data["startScreenText"];
+    return Text(dashboardText, textAlign: TextAlign.center,style: TextStyle(color: Colors.deepOrange, fontWeight: FontWeight.bold),);
   }
 
   Future<Widget> _buildPersonalPredictions(BuildContext context) async{
@@ -254,9 +278,18 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void _checkboxUpdate(bool value,String code, String action, DocumentSnapshot snap) {
+  void _checkboxUpdate(bool value, String code, String action, DocumentSnapshot snap) {
     if(action == "Walker" && snap.data[code + "Dies"] == false){
       snap.reference.updateData({code + "Dies":true});
+    }
+    if(action == "Lives" && snap.data[code + "Dies"] == true){
+      snap.reference.updateData({code + "Dies":false});
+    }
+    if(action == "Dies" && snap.data[code + "Lives"] == true){
+      snap.reference.updateData({code + "Lives":false});
+    }
+    if(action == "Dies" && snap.data[code + "Walker"] == true){
+      snap.reference.updateData({code + "Walker":false});
     }
 
     snap.reference.updateData({code + action:value});
