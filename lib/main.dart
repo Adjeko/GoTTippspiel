@@ -300,7 +300,8 @@ class _MyHomePageState extends State<MyHomePage> {
       stream: Firestore.instance.collection('predictions').snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return CircularProgressIndicator();
-
+        List<DocumentSnapshot> documents = snapshot.data.documents;
+        documents.sort((DocumentSnapshot a, DocumentSnapshot b) => (b.data["points"] as int).compareTo(a.data["points"] as int) );
         return _buildList(context, snapshot.data.documents);
       },
     );
@@ -331,7 +332,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     DocumentSnapshot reference = await Firestore.instance.collection('reference').document('reference').get();  
     
-    snap.reference.updateData({"points":_calcPoints(reference, snap)});
+    //snap.reference.updateData({"points":_calcPoints(reference, snap)});
 
     return Padding(
      key: ValueKey(snap.data["name"]),
