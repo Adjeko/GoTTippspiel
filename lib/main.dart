@@ -332,7 +332,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     DocumentSnapshot reference = await Firestore.instance.collection('reference').document('reference').get();  
     
-    //snap.reference.updateData({"points":_calcPoints(reference, snap)});
+    snap.reference.updateData({"points":_calcPoints(reference, snap)});
 
     return Padding(
      key: ValueKey(snap.data["name"]),
