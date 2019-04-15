@@ -428,25 +428,25 @@ class _MyHomePageState extends State<MyHomePage> {
     if (tc.text.isNotEmpty) {
       sp.setString("name", tc.text);
 
-      CollectionReference col = Firestore.instance.collection("predictions");
+      // CollectionReference col = Firestore.instance.collection("predictions");
 
-      Map<String, dynamic> data = Map<String, dynamic>();
-      data["name"] = tc.text;
-      data["points"] = 0;
-      List<String> names = ["JonSnow", "AryaStark", "BranStark", "SansaStark", "Cersei", "Jaime", "Tyrion",
-        "Daenerys", "Asha", "Euron", "Theon", "Melisandre", "Jorah", "Bluthund", "Berg", "Samwell", "Gilly",
-        "LordVarys", "Brienne", "Davos", "Bronn", "Podrick", "Tormund", "GrauerWurm", "Gendry", "Beric"];
-      for (var n in names) {
-        data[n + "Lives"] = false;
-        data[n + "Dies"] = false;
-        data[n + "Walker"] = false;
-      }
+      // Map<String, dynamic> data = Map<String, dynamic>();
+      // data["name"] = tc.text;
+      // data["points"] = 0;
+      // List<String> names = ["JonSnow", "AryaStark", "BranStark", "SansaStark", "Cersei", "Jaime", "Tyrion",
+      //   "Daenerys", "Asha", "Euron", "Theon", "Melisandre", "Jorah", "Bluthund", "Berg", "Samwell", "Gilly",
+      //   "LordVarys", "Brienne", "Davos", "Bronn", "Podrick", "Tormund", "GrauerWurm", "Gendry", "Beric"];
+      // for (var n in names) {
+      //   data[n + "Lives"] = false;
+      //   data[n + "Dies"] = false;
+      //   data[n + "Walker"] = false;
+      // }
 
-      data["PayensGeheimnis"] = "Bitte eintragen";
-      data["BranNachtkoenig"] = "Bitte eintragen";
-      data["KillNachtkoenig"] = "Bitte eintragen";
-      data["EisernerThron"] = "Bitte eintragen";
-      col.document(tc.text).setData(data);
+      // data["PayensGeheimnis"] = "Bitte eintragen";
+      // data["BranNachtkoenig"] = "Bitte eintragen";
+      // data["KillNachtkoenig"] = "Bitte eintragen";
+      // data["EisernerThron"] = "Bitte eintragen";
+      // col.document(tc.text).setData(data);
       _redrawWidget();
       Navigator.pop(context);
     }
