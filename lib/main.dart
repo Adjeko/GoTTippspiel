@@ -139,7 +139,7 @@ class _MyHomePageState extends State<MyHomePage> {
       builder: (context, snapshot) {
         if (!snapshot.hasData) return LinearProgressIndicator();
 
-        return _buildDocument(context, snapshot.data, true);
+        return _buildDocument(context, snapshot.data, false);
       },
     );
   }
@@ -176,7 +176,7 @@ class _MyHomePageState extends State<MyHomePage> {
       builder: (context, snapshot) {
         if (!snapshot.hasData) return LinearProgressIndicator();
 
-        return _buildDocument(context, snapshot.data, true);
+        return _buildDocument(context, snapshot.data, false);
       },
     );
   }
